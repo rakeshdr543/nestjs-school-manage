@@ -1,10 +1,24 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
+import { LessonModule } from './lesson/lesson.module';
+import { Lesson } from './lesson/lesson.entity';
+import { StudentModule } from './student/student.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      url: 'mongodb+srv://rakesh:12345@cluster0.oaxa7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+      synchronize: true,
+      useUnifiedTopology: true,
+      entities: [Lesson],
+    }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+    }),
+    LessonModule,
+    StudentModule,
+  ],
 })
 export class AppModule {}
